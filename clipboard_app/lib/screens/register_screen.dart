@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../services/api_service.dart';
+import '../config/app_config.dart';
 
 class RegisterScreen extends StatefulWidget {
   @override
@@ -12,7 +13,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final passwordController = TextEditingController();
 
   Future<void> register() async {
-    final api = ApiService(baseUrl: 'http://localhost:3000');
+    final api = ApiService(baseUrl: AppConfig.baseUrl);
     final res = await api.post('auth/register', {
       'username': usernameController.text,
       'email': emailController.text,

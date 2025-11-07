@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../services/api_service.dart';
 import '../services/background_clipboard_service.dart';
+import '../config/app_config.dart';
 import 'home_screen.dart';
 import 'register_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -15,7 +16,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final passwordController = TextEditingController();
 
   void login() async {
-    final api = ApiService(baseUrl: 'http://localhost:3000');
+    final api = ApiService(baseUrl: AppConfig.baseUrl);
     final res = await api.post('auth/login', {
       'email': emailController.text,
       'password': passwordController.text,
@@ -36,7 +37,7 @@ class _LoginScreenState extends State<LoginScreen> {
       }
 
       // 1️⃣ Register device BEFORE navigating to Home
-      final api = ApiService(baseUrl: "http://localhost:3000");
+      final api = ApiService(baseUrl: AppConfig.baseUrl);
       await api.post("devices/register", {
         "deviceId": deviceId,
         "userId": res['user']['id'],

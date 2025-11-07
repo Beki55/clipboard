@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../providers/clipboard_provider.dart';
 import '../services/websocket_service.dart';
 import '../services/clipboard_monitor_service.dart';
+import '../config/app_config.dart';
 import '../models/clipboard_item.dart';
 import 'package:clipboard/clipboard.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -43,7 +44,7 @@ class _HomeScreenState extends State<HomeScreen> {
     _currentDeviceId = deviceId;
 
     // 2️⃣ Register device with backend BEFORE WS
-    final api = ApiService(baseUrl: "http://localhost:3000"); // your backend IP
+    final api = ApiService(baseUrl: AppConfig.baseUrl);
     await api.post("devices/register", {
       "deviceId": deviceId,
       "userId": int.parse(widget.userId),
@@ -52,7 +53,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     // 3️⃣ Now connect WebSocket safely
     wsService = WebSocketService(
-      url: "ws://localhost:3000?userId=${widget.userId}&deviceId=$deviceId",
+      url: AppConfig.getWebSocketUrl(widget.userId, deviceId),
     );
 
     wsService.onReceive = (data) {

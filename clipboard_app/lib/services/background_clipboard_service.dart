@@ -7,12 +7,14 @@ import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:flutter_background_service_android/flutter_background_service_android.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'websocket_service.dart';
+import '../config/app_config.dart';
 
 class BackgroundClipboardService {
   static const String notificationChannelId = 'clipboard_monitor';
   static const String notificationChannelName = 'Clipboard Monitor';
   static const String notificationTitle = 'Clipboard Sync';
-  static const String notificationContent = 'Monitoring clipboard in background';
+  static const String notificationContent =
+      'Monitoring clipboard in background';
 
   static Future<void> initializeService() async {
     final service = FlutterBackgroundService();
@@ -62,13 +64,13 @@ class BackgroundClipboardService {
     String? userId;
     String? deviceId;
     Timer? clipboardTimer;
-    
+
     // Cleanup function
     void cleanup() {
       clipboardTimer?.cancel();
       wsService?.disconnect();
     }
-    
+
     service.on('stopService').listen((event) {
       cleanup();
       service.stopSelf();
@@ -88,11 +90,13 @@ class BackgroundClipboardService {
 
       // Initialize WebSocket connection
       wsService = WebSocketService(
-        url: 'ws://localhost:3000?userId=$userId&deviceId=$deviceId',
+        url: AppConfig.getWebSocketUrl(userId, deviceId),
       );
 
       wsService.onReceive = (data) {
-        final content = data is String ? data : (data["content"] ?? data["data"]?["content"]);
+        final content = data is String
+            ? data
+            : (data["content"] ?? data["data"]?["content"]);
         if (content != null && content is String) {
           // Update clipboard when receiving from server
           FlutterClipboard.copy(content);
@@ -104,7 +108,9 @@ class BackgroundClipboardService {
       service.invoke('updateStatus', {'status': 'Connected'});
 
       // Start clipboard monitoring
-      clipboardTimer = Timer.periodic(const Duration(seconds: 1), (timer) async {
+      clipboardTimer = Timer.periodic(const Duration(seconds: 1), (
+        timer,
+      ) async {
         try {
           final currentContent = await FlutterClipboard.paste();
 
@@ -129,7 +135,6 @@ class BackgroundClipboardService {
           // Silently handle clipboard access errors
         }
       });
-
     } catch (e) {
       service.invoke('updateStatus', {'status': 'Error: $e'});
     }
@@ -150,4 +155,3 @@ class BackgroundClipboardService {
     return await service.isRunning();
   }
 }
-
