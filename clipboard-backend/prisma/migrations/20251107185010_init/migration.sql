@@ -12,7 +12,7 @@ CREATE TABLE "User" (
 
 -- CreateTable
 CREATE TABLE "Device" (
-    "id" SERIAL NOT NULL,
+    "id" TEXT NOT NULL,
     "userId" INTEGER NOT NULL,
     "deviceName" TEXT,
     "deviceType" TEXT,
@@ -26,7 +26,7 @@ CREATE TABLE "Device" (
 CREATE TABLE "ClipboardItem" (
     "id" SERIAL NOT NULL,
     "userId" INTEGER NOT NULL,
-    "deviceId" INTEGER,
+    "deviceId" TEXT,
     "content" TEXT NOT NULL,
     "contentType" TEXT NOT NULL DEFAULT 'text',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -38,7 +38,7 @@ CREATE TABLE "ClipboardItem" (
 -- CreateTable
 CREATE TABLE "DeviceSession" (
     "id" SERIAL NOT NULL,
-    "deviceId" INTEGER NOT NULL,
+    "deviceId" TEXT NOT NULL,
     "socketId" TEXT NOT NULL,
     "connectedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "disconnectedAt" TIMESTAMP(3),
