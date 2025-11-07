@@ -23,7 +23,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
     if (res['access_token'] != null) {
       final prefs = await SharedPreferences.getInstance();
-      
+
       // Save credentials for background service
       await prefs.setString('token', res['access_token']);
       await prefs.setInt('userId', res['user']['id']);

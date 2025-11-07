@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'dart:ui';
 import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 import 'package:clipboard/clipboard.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:flutter_background_service_android/flutter_background_service_android.dart';
-import 'package:flutter_background_service_ios/flutter_background_service_ios.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'websocket_service.dart';
 
@@ -56,10 +56,6 @@ class BackgroundClipboardService {
       });
     }
 
-    service.on('stopService').listen((event) {
-      service.stopSelf();
-    });
-
     // Initialize variables
     String? lastClipboardContent;
     WebSocketService? wsService;
@@ -75,6 +71,7 @@ class BackgroundClipboardService {
     
     service.on('stopService').listen((event) {
       cleanup();
+      service.stopSelf();
     });
 
     // Load user credentials

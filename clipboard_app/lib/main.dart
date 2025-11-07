@@ -6,10 +6,10 @@ import 'services/background_clipboard_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
+
   // Initialize background service
   await BackgroundClipboardService.initializeService();
-  
+
   runApp(
     MultiProvider(
       providers: [ChangeNotifierProvider(create: (_) => ClipboardProvider())],

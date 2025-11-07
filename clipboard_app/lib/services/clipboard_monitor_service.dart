@@ -16,9 +16,10 @@ class ClipboardMonitorService {
   Future<void> _checkClipboard() async {
     try {
       final currentContent = await FlutterClipboard.paste();
-      
+
       // Only trigger if content changed and is not empty
-      if (currentContent != _lastClipboardContent && currentContent.isNotEmpty) {
+      if (currentContent != _lastClipboardContent &&
+          currentContent.isNotEmpty) {
         _lastClipboardContent = currentContent;
         if (onClipboardChanged != null) {
           onClipboardChanged!(currentContent);
@@ -39,4 +40,3 @@ class ClipboardMonitorService {
     stopMonitoring();
   }
 }
-
